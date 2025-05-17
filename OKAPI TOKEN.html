@@ -1,0 +1,901 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$OKAPI TOKEN - Farming Adventure</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 20c-10 0-18 8-18 18s8 18 18 18 18-8 18-18-8-18-18-18zm0 30c-6.6 0-12-5.4-12-12s5.4-12 12-12 12 5.4 12 12-5.4 12-12 12z' fill='%232a9d8f'/><path d='M50 60v20h10V60H50z' fill='%232a9d8f'/></svg>" type="image/svg+xml"> <!-- Wheat favicon -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2a9d8f; /* Forest Green */
+            --secondary: #e9c46a; /* Harvest Gold */
+            --accent: #8b5e3c; /* Earthy Brown */
+            --text: #ffffff;
+            --bg-dark: rgba(20, 33, 61, 0.95); /* Deep Soil */
+            --bronze: #cd7f32;
+            --silver: #d1d5db;
+            --gold: #f0c05a;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --gradient: linear-gradient(135deg, #2a9d8f, #8b5e3c);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: url('https://images.unsplash.com/photo-1500595046743-ee65ed22d3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center/cover;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 40px auto;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header img.logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        .stats p {
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .stats i {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .stats span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        #farm-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            padding: 20px;
+            background: var(--gradient);
+            color: var(--text);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 30px auto;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        #farm-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        #farm-button:active {
+            transform: translateY(0);
+        }
+
+        #farm-button:disabled {
+            background: #4b5563;
+            cursor: not-allowed;
+        }
+
+        #timer-display {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            color: var(--secondary);
+        }
+
+        .tab-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .tab-menu button {
+            flex: 1;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-menu button:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .tab-menu button.active {
+            background: var(--secondary);
+            color: #000;
+            border-color: var(--secondary);
+        }
+
+        .tab-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            transition: opacity 0.3s ease;
+        }
+
+        .tab-content h2 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .task, .upgrade, .achievement, .daily-bonus, .referral, .reset-data {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .task button, .upgrade button, .achievement button, .daily-bonus button, .referral button, .reset-button {
+            background: var(--gradient);
+            color: var(--text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task button:hover, .upgrade button:hover, .achievement button:hover, .daily-bonus button:hover, .referral button:hover, .reset-button:hover {
+            background: var(--secondary);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .achievement.bronze { border-left: 5px solid var(--bronze); }
+        .achievement.silver { border-left: 5px solid var(--silver); }
+        .achievement.gold { border-left: 5px solid var(--gold); }
+
+        .leaderboard-list {
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 5px 15px var(--shadow);
+            display: none;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        footer .copyright {
+            margin-bottom: 10px;
+        }
+
+        footer .rights-reserved {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        footer .links a {
+            color: var(--accent);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 0.85rem;
+        }
+
+        footer .links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            h1 { font-size: 2rem; }
+            #farm-button { font-size: 1.2rem; padding: 15px; }
+            .tab-menu button { font-size: 0.9rem; padding: 10px; }
+        }
+    </style>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://via.placeholder.com/80?text=Wheat" alt="OKAPI Farm Logo" class="logo">
+            <h1>$OKAPI TOKEN</h1>
+        </div>
+        <div class="stats">
+            <p><i class="fas fa-seedling"></i> Tokens: <span id="points">0</span></p>
+            <p><i class="fas fa-level-up-alt"></i> Level: <span id="level">1</span></p>
+            <p><i class="fas fa-trophy"></i> Next Level: <span id="level-progress">0/200</span></p>
+        </div>
+        <button id="farm-button"><i class="fas fa-tractor"></i> Start Farming</button>
+        <div id="timer-display">Time until harvest: Not started</div>
+        <div class="tab-menu">
+            <button onclick="showTab('tasks')" class="active">Tasks</button>
+            <button onclick="showTab('upgrades')">Upgrades</button>
+            <button onclick="showTab('achievements')">Achievements</button>
+            <button onclick="showTab('leaderboard')">Rankings</button>
+            <button onclick="showTab('wallet')">Wallet</button>
+            <button onclick="showTab('bonus')">Bonus</button>
+        </div>
+        <div id="tasks" class="tab-content">
+            <h2>Farm Tasks</h2>
+            <div class="task">
+                <p>Start farming 50 times (Reward: 100 tokens)</p>
+                <p>Progress: <span id="task1-progress">0</span>/50</p>
+                <button id="task1-claim" disabled>Claim Reward</button>
+            </div>
+            <div class="task">
+                <p>Start farming 100 times (Reward: 250 tokens)</p>
+                <p>Progress: <span id="task2-progress">0</span>/100</p>
+                <button id="task2-claim" disabled>Claim Reward</button>
+            </div>
+            <div class="task">
+                <p>Follow @OkapiToken on X (Reward: 200 tokens)</p>
+                <button id="task3-complete" onclick="completeTask3()">Follow</button>
+            </div>
+        </div>
+        <div id="upgrades" class="tab-content" style="display: none;">
+            <h2>Farm Upgrades</h2>
+            <div class="upgrade">
+                <p>Turbo Tractor (2x tokens per harvest, Cost: 500 tokens)</p>
+                <button id="upgrade1-buy" onclick="buyUpgrade(1)">Buy</button>
+            </div>
+            <div class="upgrade">
+                <p>Auto-Harvester (Automatic farming every 3 hours, Cost: 1000 tokens, Requires Level 30)</p>
+                <button id="upgrade2-buy" onclick="buyUpgrade(2)">Buy</button>
+            </div>
+        </div>
+        <div id="achievements" class="tab-content" style="display: none;">
+            <h2>Achievements</h2>
+            <div class="achievement bronze">
+                <p>Bronze Farmer: Start farming 100 times (Reward: 100 tokens)</p>
+                <p>Progress: <span id="ach1-progress">0</span>/100</p>
+                <button id="ach1-claim" disabled>Claim Reward</button>
+            </div>
+            <div class="achievement silver">
+                <p>Silver Grower: Reach Level 5 (Reward: 200 tokens)</p>
+                <p>Progress: <span id="ach2-progress">1</span>/5</p>
+                <button id="ach2-claim" disabled>Claim Reward</button>
+            </div>
+            <div class="achievement gold">
+                <p>Gold Harvester: Buy an upgrade (Reward: 150 tokens)</p>
+                <p>Progress: <span id="ach3-progress">0</span>/1</p>
+                <button id="ach3-claim" disabled>Claim Reward</button>
+            </div>
+        </div>
+        <div id="leaderboard" class="tab-content" style="display: none;">
+            <h2>Farmers' Rankings</h2>
+            <p>Your Rank: <span id="player-rank">N/A</span> (League: <span id="player-league">Rookie</span>)</p>
+            <div class="leaderboard-list" id="leaderboard-list"></div>
+        </div>
+        <div id="wallet" class="tab-content" style="display: none;">
+            <h2>Wallet</h2>
+            <p>Connect your Web3 wallet to receive $OKAPI TOKENS after the airdrop.</p>
+            <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
+            <p id="wallet-address" style="word-break: break-all; display: none;">Connected: <span id="wallet-public-key"></span></p>
+            <button id="disconnect-wallet" onclick="disconnectWallet()" style="display: none;">Disconnect Wallet</button>
+        </div>
+        <div id="bonus" class="tab-content" style="display: none;">
+            <h2>Bonuses</h2>
+            <div class="daily-bonus">
+                <p>Daily Login Bonus (Reward: 50 tokens)</p>
+                <button id="daily-bonus-claim" onclick="claimDailyBonus()">Claim</button>
+            </div>
+            <div class="referral">
+                <p>Invite a Friend (Reward: 100 tokens per referral)</p>
+                <p>Your Referral Link: <span id="referral-code">N/A</span></p>
+                <button onclick="generateReferral()">Generate Link</button>
+                <button id="share-referral" onclick="shareReferral()" style="display: none;">Share Link</button>
+            </div>
+            <div class="reset-data">
+                <p>Reset all farm data to start fresh.</p>
+                <button class="reset-button" onclick="resetData()">Reset Data</button>
+            </div>
+        </div>
+        <div id="notification" class="notification"></div>
+    </div>
+    <footer>
+        <p class="copyright">© 2025 OKAPI Token. <span class="rights-reserved">All rights reserved.</span></p>
+        <p class="links">
+            <a href="/terms">Terms</a> |
+            <a href="/privacy">Privacy</a> |
+            <a href="https://x.com/okapi">Follow us on X</a>
+        </p>
+    </footer>
+
+    <script>
+        // Initialize state
+        let points = parseInt(localStorage.getItem('points')) || 0;
+        let farmingStart = parseInt(localStorage.getItem('farmingStart')) || 0;
+        let isFarming = localStorage.getItem('isFarming') === 'true';
+        let tapMultiplier = parseInt(localStorage.getItem('tapMultiplier')) || 1;
+        let autoHarvester = localStorage.getItem('autoHarvester') === 'true';
+        let autoHarvesterPurchased = localStorage.getItem('autoHarvesterPurchased') === 'true';
+        let turboTractorPurchased = localStorage.getItem('turboTractorPurchased') === 'true';
+        let task1Progress = parseInt(localStorage.getItem('task1Progress')) || 0;
+        let task1Completed = localStorage.getItem('task1Completed') === 'true';
+        let task2Progress = parseInt(localStorage.getItem('task2Progress')) || 0;
+        let task2Completed = localStorage.getItem('task2Completed') === 'true';
+        let task3Completed = localStorage.getItem('task3Completed') === 'true';
+        let level = parseInt(localStorage.getItem('level')) || 1;
+        let totalFarms = parseInt(localStorage.getItem('totalFarms')) || 0;
+        let upgradesBought = parseInt(localStorage.getItem('upgradesBought')) || 0;
+        let achievements = JSON.parse(localStorage.getItem('achievements')) || { ach1: false, ach2: false, ach3: false };
+        let walletAddress = localStorage.getItem('walletAddress') || null;
+        let lastDailyBonus = parseInt(localStorage.getItem('lastDailyBonus')) || 0;
+        let referralCode = localStorage.getItem('referralCode') || null;
+        let referralCount = parseInt(localStorage.getItem('referralCount')) || 0;
+
+        // DOM elements
+        const farmButton = document.getElementById('farm-button');
+        const pointsDisplay = document.getElementById('points');
+        const levelDisplay = document.getElementById('level');
+        const levelProgressDisplay = document.getElementById('level-progress');
+        const timerDisplay = document.getElementById('timer-display');
+        const task1ProgressDisplay = document.getElementById('task1-progress');
+        const task1ClaimButton = document.getElementById('task1-claim');
+        const task2ProgressDisplay = document.getElementById('task2-progress');
+        const task2ClaimButton = document.getElementById('task2-claim');
+        const task3CompleteButton = document.getElementById('task3-complete');
+        const notification = document.getElementById('notification');
+        const walletAddressDisplay = document.getElementById('wallet-address');
+        const walletPublicKey = document.getElementById('wallet-public-key');
+        const connectWalletButton = document.getElementById('connect-wallet');
+        const disconnectWalletButton = document.getElementById('disconnect-wallet');
+        const dailyBonusButton = document.getElementById('daily-bonus-claim');
+        const referralCodeDisplay = document.getElementById('referral-code');
+        const shareReferralButton = document.getElementById('share-referral');
+        const playerRankDisplay = document.getElementById('player-rank');
+        const playerLeagueDisplay = document.getElementById('player-league');
+        const upgrade1BuyButton = document.getElementById('upgrade1-buy');
+        const upgrade2BuyButton = document.getElementById('upgrade2-buy');
+
+        // Mock leaderboard data
+        let leaderboardData = JSON.parse(localStorage.getItem('leaderboardData')) || [
+            { name: "FarmerJoe", points: 150000 },
+            { name: "GreenThumb", points: 120000 },
+            { name: "CropKing", points: 100000 },
+            { name: "FieldStar", points: 80000 },
+            { name: "HarvestPro", points: 60000 }
+        ];
+
+        // Leagues
+        const leagues = [
+            { name: "Rookie", minPoints: 0 },
+            { name: "Bronze", minPoints: 5000 },
+            { name: "Silver", minPoints: 20000 },
+            { name: "Gold", minPoints: 50000 },
+            { name: "Diamond", minPoints: 100000 }
+        ];
+
+        // Level requirements
+        function getPointsForLevel(lvl) {
+            return 50 * lvl * lvl;
+        }
+
+        // Get player's league
+        function getPlayerLeague(points) {
+            return leagues.reduce((prev, curr) => points >= curr.minPoints ? curr.name : prev, leagues[0].name);
+        }
+
+        // Update leaderboard
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            leaderboardList.innerHTML = '';
+            const playerEntry = { 
+                name: walletAddress ? `You (${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)})` : 'You', 
+                points 
+            };
+            leaderboardData = leaderboardData.filter(entry => entry.name !== playerEntry.name);
+            leaderboardData.push(playerEntry);
+            leaderboardData.sort((a, b) => b.points - a.points);
+            localStorage.setItem('leaderboardData', JSON.stringify(leaderboardData));
+
+            const playerRank = leaderboardData.findIndex(entry => entry.name === playerEntry.name) + 1;
+            playerRankDisplay.textContent = playerRank <= 10 ? `#${playerRank}` : 'N/A';
+            playerLeagueDisplay.textContent = getPlayerLeague(points);
+
+            leaderboardData.slice(0, 10).forEach((entry, index) => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = `leaderboard-entry ${entry.name === playerEntry.name ? 'current-player' : ''}`;
+                entryDiv.innerHTML = `
+                    <span class="rank">#${index + 1}</span>
+                    <span class="player">${entry.name}</span>
+                    <span class="points">${entry.points.toLocaleString()} tokens</span>
+                `;
+                leaderboardList.appendChild(entryDiv);
+            });
+        }
+
+        // Format time
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+
+        // Farming logic
+        const FARM_DURATION = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+        const BASE_REWARD = 3000; // Base tokens per harvest
+
+        function startFarming() {
+            if (!isFarming) {
+                isFarming = true;
+                farmingStart = Date.now();
+                totalFarms++;
+                task1Progress = Math.min(task1Progress + 1, 50);
+                task2Progress = Math.min(task2Progress + 1, 100);
+                localStorage.setItem('isFarming', isFarming);
+                localStorage.setItem('farmingStart', farmingStart);
+                localStorage.setItem('totalFarms', totalFarms);
+                localStorage.setItem('task1Progress', task1Progress);
+                localStorage.setItem('task2Progress', task2Progress);
+                updateUI();
+                showNotification('Farming started! Come back in 3 hours to collect rewards.');
+            } else {
+                showNotification('Farming already in progress!');
+            }
+        }
+
+        function checkFarming() {
+            if (isFarming && farmingStart) {
+                const elapsed = Date.now() - farmingStart;
+                if (elapsed >= FARM_DURATION) {
+                    const reward = BASE_REWARD * tapMultiplier;
+                    points += reward;
+                    isFarming = false;
+                    farmingStart = 0;
+                    localStorage.setItem('points', points);
+                    localStorage.setItem('isFarming', isFarming);
+                    localStorage.setItem('farmingStart', farmingStart);
+                    updateUI();
+                    showNotification(`Harvest complete! +${reward} tokens`);
+                    if (autoHarvester) {
+                        setTimeout(startFarming, 1000); // Auto-restart farming
+                    }
+                }
+            }
+        }
+
+        // Update timer display
+        function updateTimer() {
+            if (isFarming && farmingStart) {
+                const elapsed = Date.now() - farmingStart;
+                const remaining = Math.max(0, (FARM_DURATION - elapsed) / 1000);
+                timerDisplay.textContent = `Time until harvest: ${formatTime(remaining)}`;
+                farmButton.disabled = true;
+                farmButton.textContent = 'Farming...';
+            } else {
+                timerDisplay.textContent = 'Time until harvest: Not started';
+                farmButton.disabled = false;
+                farmButton.textContent = 'Start Farming';
+            }
+        }
+
+        // Check farming status and update timer every second
+        setInterval(() => {
+            checkFarming();
+            updateTimer();
+        }, 1000);
+
+        // Check for offline rewards
+        if (isFarming && farmingStart) {
+            const elapsed = Date.now() - farmingStart;
+            if (elapsed >= FARM_DURATION) {
+                const reward = BASE_REWARD * tapMultiplier;
+                points += reward;
+                isFarming = false;
+                farmingStart = 0;
+                localStorage.setItem('points', points);
+                localStorage.setItem('isFarming', isFarming);
+                localStorage.setItem('farmingStart', farmingStart);
+                showNotification(`Offline harvest complete! +${reward} tokens`);
+                if (autoHarvester) {
+                    startFarming();
+                }
+            }
+        }
+
+        // Update UI
+        function updateUI() {
+            pointsDisplay.textContent = points.toLocaleString();
+            levelDisplay.textContent = level;
+            const nextLevelPoints = getPointsForLevel(level + 1);
+            levelProgressDisplay.textContent = `${points.toLocaleString()}/${nextLevelPoints.toLocaleString()}`;
+            task1ProgressDisplay.textContent = task1Progress;
+            task1ClaimButton.disabled = task1Progress < 50 || task1Completed;
+            task2ProgressDisplay.textContent = task2Progress;
+            task2ClaimButton.disabled = task2Progress < 100 || task2Completed;
+            task3CompleteButton.disabled = task3Completed;
+            document.getElementById('ach1-progress').textContent = totalFarms;
+            document.getElementById('ach2-progress').textContent = level;
+            document.getElementById('ach3-progress').textContent = upgradesBought;
+            document.getElementById('ach1-claim').disabled = totalFarms < 100 || achievements.ach1;
+            document.getElementById('ach2-claim').disabled = level < 5 || achievements.ach2;
+            document.getElementById('ach3-claim').disabled = upgradesBought < 1 || achievements.ach3;
+            referralCodeDisplay.textContent = referralCode ? `https://okapi.farm/ref/${referralCode}` : 'N/A';
+            shareReferralButton.style.display = referralCode ? 'inline-block' : 'none';
+
+            upgrade1BuyButton.disabled = turboTractorPurchased || points < 500;
+            upgrade2BuyButton.disabled = autoHarvesterPurchased || points < 1000 || level < 30;
+
+            if (walletAddress) {
+                walletAddressDisplay.style.display = 'block';
+                walletPublicKey.textContent = walletAddress;
+                connectWalletButton.style.display = 'none';
+                disconnectWalletButton.style.display = 'block';
+            } else {
+                walletAddressDisplay.style.display = 'none';
+                connectWalletButton.style.display = 'block';
+                disconnectWalletButton.style.display = 'none';
+            }
+
+            dailyBonusButton.disabled = Date.now() - lastDailyBonus < 24 * 60 * 60 * 1000;
+
+            while (points >= getPointsForLevel(level + 1)) {
+                level++;
+                points += 50;
+                showNotification(`Level Up! Reached Level ${level}! +50 tokens`);
+            }
+
+            localStorage.setItem('points', points);
+            localStorage.setItem('tapMultiplier', tapMultiplier);
+            localStorage.setItem('autoHarvester', autoHarvester);
+            localStorage.setItem('autoHarvesterPurchased', autoHarvesterPurchased);
+            localStorage.setItem('turboTractorPurchased', turboTractorPurchased);
+            localStorage.setItem('task1Progress', task1Progress);
+            localStorage.setItem('task1Completed', task1Completed);
+            localStorage.setItem('task2Progress', task2Progress);
+            localStorage.setItem('task2Completed', task2Completed);
+            localStorage.setItem('task3Completed', task3Completed);
+            localStorage.setItem('level', level);
+            localStorage.setItem('totalFarms', totalFarms);
+            localStorage.setItem('upgradesBought', upgradesBought);
+            localStorage.setItem('achievements', JSON.stringify(achievements));
+            localStorage.setItem('walletAddress', walletAddress);
+            localStorage.setItem('lastDailyBonus', lastDailyBonus);
+            localStorage.setItem('referralCode', referralCode);
+            localStorage.setItem('referralCount', referralCount);
+
+            updateLeaderboard();
+            updateTimer();
+        }
+
+        // Start farming event
+        farmButton.addEventListener('click', startFarming);
+
+        // Show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.style.display = 'block';
+            notification.style.opacity = '1';
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.style.display = 'none', 300);
+            }, 3000);
+        }
+
+        // Tab navigation
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            const tabElement = document.getElementById(tabId);
+            if (tabElement) tabElement.style.display = 'block';
+            document.querySelectorAll('.tab-menu button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-menu button[onclick="showTab('${tabId}')"]`)?.classList.add('active');
+        }
+
+        // Tasks
+        task1ClaimButton.addEventListener('click', () => {
+            if (task1Progress >= 50 && !task1Completed) {
+                points += 100;
+                task1Completed = true;
+                updateUI();
+                showNotification('Task completed! +100 tokens');
+            }
+        });
+
+        task2ClaimButton.addEventListener('click', () => {
+            if (task2Progress >= 100 && !task2Completed) {
+                points += 250;
+                task2Completed = true;
+                updateUI();
+                showNotification('Task completed! +250 tokens');
+            }
+        });
+
+        function completeTask3() {
+            if (!task3Completed) {
+                window.open('https://x.com', '_blank');
+                points += 200;
+                task3Completed = true;
+                updateUI();
+                showNotification('Task completed! +200 tokens');
+            } else {
+                showNotification('Task already completed!');
+            }
+        }
+
+        // Upgrades
+        function buyUpgrade(id) {
+            if (id === 1 && points >= 500 && !turboTractorPurchased) {
+                points -= 500;
+                tapMultiplier = 2;
+                turboTractorPurchased = true;
+                upgradesBought++;
+                updateUI();
+                showNotification('Turbo Tractor purchased! 2x tokens per harvest');
+            } else if (id === 2 && points >= 1000 && !autoHarvesterPurchased && level >= 30) {
+                points -= 1000;
+                autoHarvester = true;
+                autoHarvesterPurchased = true;
+                upgradesBought++;
+                if (!isFarming) startFarming(); // Start farming if not already
+                updateUI();
+                showNotification('Auto-Harvester purchased! Automatic farming every 3 hours');
+            } else {
+                showNotification(id === 2 && level < 30 ? 'Requires Level 30!' : 'Not enough tokens or already purchased!');
+            }
+        }
+
+        // Achievements
+        document.getElementById('ach1-claim').addEventListener('click', () => {
+            if (totalFarms >= 100 && !achievements.ach1) {
+                points += 100;
+                achievements.ach1 = true;
+                updateUI();
+                showNotification('Achievement completed! +100 tokens');
+            }
+        });
+
+        document.getElementById('ach2-claim').addEventListener('click', () => {
+            if (level >= 5 && !achievements.ach2) {
+                points += 200;
+                achievements.ach2 = true;
+                updateUI();
+                showNotification('Achievement completed! +200 tokens');
+            }
+        });
+
+        document.getElementById('ach3-claim').addEventListener('click', () => {
+            if (upgradesBought >= 1 && !achievements.ach3) {
+                points += 150;
+                achievements.ach3 = true;
+                updateUI();
+                showNotification('Achievement completed! +150 tokens');
+            }
+        });
+
+        // Wallet Integration
+        let provider;
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                } else {
+                    showNotification('Please replace YOUR_INFURA_ID with a valid Infura ID in the code or install MetaMask.');
+                    return;
+                }
+                const signer = provider.getSigner();
+                walletAddress = await signer.getAddress();
+                localStorage.setItem('walletAddress', walletAddress);
+                updateUI();
+                showNotification(`Wallet connected: ${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`);
+            } catch (error) {
+                showNotification(`Failed to connect wallet: ${error.message}`);
+            }
+        }
+
+        function disconnectWallet() {
+            walletAddress = null;
+            provider = null;
+            localStorage.removeItem('walletAddress');
+            updateUI();
+            showNotification('Wallet disconnected.');
+        }
+
+        // Daily Bonus
+        function claimDailyBonus() {
+            const now = Date.now();
+            if (now - lastDailyBonus >= 24 * 60 * 60 * 1000) {
+                points += 50;
+                lastDailyBonus = now;
+                updateUI();
+                showNotification('Daily bonus claimed! +50 tokens');
+            } else {
+                showNotification('Come back tomorrow for your next bonus!');
+            }
+        }
+
+        // Referral System
+        function generateReferral() {
+            if (!walletAddress) {
+                showNotification('Connect your wallet to generate a referral link!');
+                return;
+            }
+            referralCode = `${walletAddress.slice(2, 10).toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+            localStorage.setItem('referralCode', referralCode);
+            updateUI();
+            showNotification(`Referral link generated: https://okapi.farm/ref/${referralCode}`);
+        }
+
+        async function shareReferral() {
+            const shareData = {
+                title: 'Join OKAPI Token Farming!',
+                text: 'Grow your farm and earn $OKAPI tokens! Join now using my referral link!',
+                url: `https://okapi.farm/ref/${referralCode}`
+            };
+            try {
+                await navigator.share(shareData);
+                points += 10;
+                referralCount++;
+                if (referralCount % 5 === 0) points += 100;
+                updateUI();
+                showNotification('Referral link shared! +10 tokens');
+            } catch (error) {
+                showNotification('Failed to share referral link.');
+            }
+        }
+
+        // Reset data
+        function resetData() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                background: var(--bg-dark); padding: 20px; border-radius: 10px;
+                box-shadow: 0 5px 15px var(--shadow); z-index: 2000; color: var(--text);
+            `;
+            modal.innerHTML = `
+                <h3>Confirm Reset</h3>
+                <p>Are you sure you want to reset all farm data? This cannot be undone.</p>
+                <button onclick="confirmReset()" style="background: var(--gradient); padding: 10px 20px; border-radius: 8px;">Confirm</button>
+                <button onclick="this.parentElement.remove()" style="background: #4b5563; padding: 10px 20px; border-radius: 8px; margin-left: 10px;">Cancel</button>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function confirmReset() {
+            localStorage.clear();
+            points = 0;
+            farmingStart = 0;
+            isFarming = false;
+            tapMultiplier = 1;
+            autoHarvester = false;
+            autoHarvesterPurchased = false;
+            turboTractorPurchased = false;
+            task1Progress = 0;
+            task1Completed = false;
+            task2Progress = 0;
+            task2Completed = false;
+            task3Completed = false;
+            level = 1;
+            totalFarms = 0;
+            upgradesBought = 0;
+            achievements = { ach1: false, ach2: false, ach3: false };
+            walletAddress = null;
+            lastDailyBonus = 0;
+            referralCode = null;
+            referralCount = 0;
+            leaderboardData = [
+                { name: "FarmerJoe", points: 150000 },
+                { name: "GreenThumb", points: 120000 },
+                { name: "CropKing", points: 100000 },
+                { name: "FieldStar", points: 80000 },
+                { name: "HarvestPro", points: 60000 }
+            ];
+            updateUI();
+            showNotification('Farm data reset successfully!');
+            document.querySelector('.modal')?.remove();
+        }
+
+        // Initialize
+        updateUI();
+        showTab('tasks');
+    </script>
+</body>
+</html>​<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Page Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
+</html>
